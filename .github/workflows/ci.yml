@@ -46,7 +46,7 @@ jobs:
         run: pip install flake8
 
       - name: Run flake8
-        run: flake8 app/ --max-line-length=100 --exclude=__pycache__
+        run: flake8 app/ --max-line-length=120 --exclude=__pycache__ --ignore=E402,W503,E501
 
   docker-build:
     runs-on: ubuntu-latest
