@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ssp-deployment
+  labels:
+    app: ssp
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ssp
+  template:
+    metadata:
+      labels:
+        app: ssp
+    spec:
+      containers:
+        - name: ssp
+          image: ssp:latest
+          ports:
+            - containerPort: 5000
+          env:
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: ssp-secrets
+                  key: secret-key
+            - name: DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: ssp-config
+                  key: database-url
+            - name: FLASK_ENV
+              value: production
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 5

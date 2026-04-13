@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if task else 'Create' }} Task - SSP{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h3 class="fw-bold mb-4">
+                    <i class="bi bi-{{ 'pencil' if task else 'plus-circle' }} me-2 text-primary"></i>
+                    {{ 'Edit Task' if task else 'New Task' }}
+                </h3>
+                <form method="POST" action="{{ url_for('tasks.edit_task', id=task.id) if task else url_for('tasks.create_task') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Title *</label>
+                        <input type="text" name="title" class="form-control" required
+                               value="{{ task.title if task else '' }}" placeholder="Task title">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Description</label>
+                        <textarea name="description" class="form-control" rows="3"
+                                  placeholder="Optional description">{{ task.description if task else '' }}</textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Subject</label>
+                            <input type="text" name="subject" class="form-control"
+                                   value="{{ task.subject if task else '' }}" placeholder="e.g. Mathematics">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Priority</label>
+                            <select name="priority" class="form-select">
+                                {% for p in ['low', 'medium', 'high'] %}
+                                <option value="{{ p }}" {{ 'selected' if task and task.priority == p else ('selected' if not task and p == 'medium' else '') }}>
+                                    {{ p|capitalize }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Difficulty: <span id="diff-val">{{ task.difficulty if task else 3 }}</span>/5</label>
+                            <input type="range" name="difficulty" class="form-range" min="1" max="5" step="1"
+                                   value="{{ task.difficulty if task else 3 }}"
+                                   oninput="document.getElementById('diff-val').textContent=this.value">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Estimated Hours</label>
+                            <input type="number" name="estimated_hours" class="form-control" min="0.5" max="100" step="0.5"
+                                   value="{{ task.estimated_hours if task else '' }}" placeholder="e.g. 3.5">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Deadline</label>
+                            <input type="datetime-local" name="deadline" class="form-control"
+                                   value="{{ task.deadline.strftime('%Y-%m-%dT%H:%M') if task and task.deadline else '' }}">
+                        </div>
+                        {% if task %}
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Status</label>
+                            <select name="status" class="form-select">
+                                {% for s in ['pending', 'in_progress', 'completed'] %}
+                                <option value="{{ s }}" {{ 'selected' if task.status == s }}>
+                                    {{ s|replace('_', ' ')|capitalize }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="d-flex gap-2 mt-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save me-1"></i>{{ 'Update' if task else 'Create' }} Task
+                        </button>
+                        <a href="{{ url_for('tasks.list_tasks') }}" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

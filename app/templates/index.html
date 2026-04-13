@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Smart Student Planner - Study Smarter{% endblock %}
+{% block content %}
+<section class="hero-section text-center py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h1 class="display-4 fw-bold hero-title">Study Smarter, Not Harder</h1>
+            <p class="lead text-muted mt-3">
+                SSP uses adaptive scheduling to build your perfect study timetable, track your tasks,
+                and give you insights to maximize academic performance.
+            </p>
+            <div class="mt-4 d-flex gap-3 justify-content-center">
+                <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg px-4">
+                    <i class="bi bi-rocket-takeoff me-2"></i>Get Started
+                </a>
+                <a href="#features" class="btn btn-outline-secondary btn-lg px-4">
+                    Learn More
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="features" class="py-5">
+    <h2 class="text-center fw-bold mb-4">Features</h2>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card feature-card h-100 text-center p-4">
+                <div class="feature-icon mb-3">
+                    <i class="bi bi-calendar2-check display-5 text-primary"></i>
+                </div>
+                <h5 class="fw-bold">Adaptive Timetable</h5>
+                <p class="text-muted">Automatically generates a balanced weekly study schedule based on your deadlines, difficulty, and available hours.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card feature-card h-100 text-center p-4">
+                <div class="feature-icon mb-3">
+                    <i class="bi bi-check2-all display-5 text-success"></i>
+                </div>
+                <h5 class="fw-bold">Task Management</h5>
+                <p class="text-muted">Create, prioritize, and track all your academic tasks with deadlines, difficulty ratings, and status tracking.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card feature-card h-100 text-center p-4">
+                <div class="feature-icon mb-3">
+                    <i class="bi bi-graph-up-arrow display-5 text-warning"></i>
+                </div>
+                <h5 class="fw-bold">Analytics Dashboard</h5>
+                <p class="text-muted">Visualize your progress with charts showing completion rates, study streaks, and subject breakdowns.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-light rounded-3 px-4">
+    <h2 class="text-center fw-bold mb-4">How It Works</h2>
+    <div class="row g-4 text-center">
+        <div class="col-md-4">
+            <div class="step-number">1</div>
+            <h5 class="fw-bold mt-3">Add Your Tasks</h5>
+            <p class="text-muted">Enter your assignments, exams, and projects with deadlines and difficulty levels.</p>
+        </div>
+        <div class="col-md-4">
+            <div class="step-number">2</div>
+            <h5 class="fw-bold mt-3">Generate Timetable</h5>
+            <p class="text-muted">Click generate and SSP builds an optimized weekly schedule with built-in breaks.</p>
+        </div>
+        <div class="col-md-4">
+            <div class="step-number">3</div>
+            <h5 class="fw-bold mt-3">Track Progress</h5>
+            <p class="text-muted">Monitor your completion rate, study streaks, and performance analytics.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

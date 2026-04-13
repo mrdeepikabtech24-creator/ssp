@@ -1,0 +1,31 @@
+name: Deploy Pipeline
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build Docker image
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/ssp:latest .
+
+      - name: Push Docker image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/ssp:latest
+
+      - name: Deploy to server (placeholder)
+        run: |
+          echo "Deploying SSP to production server..."
+          echo "Image: ${{ secrets.DOCKER_USERNAME }}/ssp:latest"
+          echo "Run: docker pull ${{ secrets.DOCKER_USERNAME }}/ssp:latest && docker-compose up -d"
+          echo "Deployment complete."

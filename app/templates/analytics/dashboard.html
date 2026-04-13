@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block title %}Analytics - SSP{% endblock %}
+{% block content %}
+<h2 class="fw-bold mb-4"><i class="bi bi-bar-chart-line me-2 text-primary"></i>Analytics Dashboard</h2>
+
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-lg-3">
+        <div class="stat-card card shadow-sm border-0 accent-primary">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="stat-label">Total Tasks</p>
+                        <h2 class="stat-number" id="stat-total">—</h2>
+                    </div>
+                    <i class="bi bi-list-task stat-icon text-primary"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <div class="stat-card card shadow-sm border-0 accent-success">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="stat-label">Completed</p>
+                        <h2 class="stat-number" id="stat-completed">—</h2>
+                    </div>
+                    <i class="bi bi-check-circle stat-icon text-success"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <div class="stat-card card shadow-sm border-0 accent-warning">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="stat-label">Pending</p>
+                        <h2 class="stat-number" id="stat-pending">—</h2>
+                    </div>
+                    <i class="bi bi-hourglass-split stat-icon text-warning"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <div class="stat-card card shadow-sm border-0 accent-secondary">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="stat-label">Completion Rate</p>
+                        <h2 class="stat-number" id="stat-rate">—</h2>
+                    </div>
+                    <i class="bi bi-percent stat-icon text-secondary"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-lg-8">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="card-title fw-semibold mb-3">
+                    <i class="bi bi-bar-chart me-2 text-primary"></i>Tasks Completed (Last 7 Days)
+                </h5>
+                <canvas id="weekly-chart" height="100"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="card-title fw-semibold mb-3">
+                    <i class="bi bi-pie-chart me-2 text-primary"></i>Task Status
+                </h5>
+                <canvas id="status-chart" height="180"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-lg-8">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title fw-semibold mb-3">
+                    <i class="bi bi-book me-2 text-primary"></i>Study Hours by Subject
+                </h5>
+                <canvas id="subject-chart" height="100"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card shadow-sm">
+            <div class="card-body text-center py-4">
+                <h5 class="card-title fw-semibold mb-3">Study Streak</h5>
+                <div class="streak-display">
+                    <span class="streak-flame">🔥</span>
+                    <h1 class="streak-number" id="streak-count">0</h1>
+                    <p class="text-muted">consecutive days</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/analytics.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

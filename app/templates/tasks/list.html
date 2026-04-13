@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Tasks - SSP{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0"><i class="bi bi-check2-square me-2 text-primary"></i>My Tasks</h2>
+    <a href="{{ url_for('tasks.create_task') }}" class="btn btn-primary">
+        <i class="bi bi-plus-lg me-1"></i>New Task
+    </a>
+</div>
+
+<div class="mb-3 d-flex gap-2 flex-wrap">
+    <a href="{{ url_for('tasks.list_tasks') }}" class="btn btn-sm {{ 'btn-primary' if status_filter == 'all' else 'btn-outline-secondary' }}">All</a>
+    <a href="{{ url_for('tasks.list_tasks', status='pending') }}" class="btn btn-sm {{ 'btn-primary' if status_filter == 'pending' else 'btn-outline-secondary' }}">Pending</a>
+    <a href="{{ url_for('tasks.list_tasks', status='in_progress') }}" class="btn btn-sm {{ 'btn-primary' if status_filter == 'in_progress' else 'btn-outline-secondary' }}">In Progress</a>
+    <a href="{{ url_for('tasks.list_tasks', status='completed') }}" class="btn btn-sm {{ 'btn-primary' if status_filter == 'completed' else 'btn-outline-secondary' }}">Completed</a>
+</div>
+
+{% if tasks %}
+<div class="card shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Title</th><th>Subject</th><th>Deadline</th>
+                    <th>Priority</th><th>Difficulty</th><th>Status</th><th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
+                <tr>
+                    <td class="fw-semibold">{{ task.title }}</td>
+                    <td>{{ task.subject or '-' }}</td>
+                    <td>{{ task.deadline.strftime('%d %b %Y') if task.deadline else '-' }}</td>
+                    <td><span class="badge priority-{{ task.priority }}">{{ task.priority|capitalize }}</span></td>
+                    <td>
+                        {% for i in range(1, 6) %}
+                        <i class="bi bi-star{{ '-fill' if i <= task.difficulty else '' }} text-warning small"></i>
+                        {% endfor %}
+                    </td>
+                    <td><span class="badge status-{{ task.status }}">{{ task.status|replace('_',' ')|capitalize }}</span></td>
+                    <td>
+                        <div class="d-flex gap-1">
+                            <a href="{{ url_for('tasks.edit_task', id=task.id) }}" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            {% if task.status != 'completed' %}
+                            <button class="btn btn-sm btn-outline-success" onclick="completeTask({{ task.id }})">
+                                <i class="bi bi-check-lg"></i>
+                            </button>
+                            {% endif %}
+                            <form method="POST" action="{{ url_for('tasks.delete_task', id=task.id) }}" class="d-inline"
+                                  onsubmit="return confirm('Delete this task?')">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
+<div class="empty-state text-center py-5">
+    <i class="bi bi-inbox display-1 text-muted"></i>
+    <h4 class="mt-3 text-muted">No tasks found</h4>
+    <p class="text-muted">Create your first task to get started.</p>
+    <a href="{{ url_for('tasks.create_task') }}" class="btn btn-primary mt-2">New Task</a>
+</div>
+{% endif %}
+{% endblock %}
+{% block scripts %}
+<script>
+function completeTask(id) {
+    fetch('/tasks/' + id + '/complete', {method: 'POST'})
+        .then(r => r.json()).then(() => location.reload());
+}
+</script>
+{% endblock %}
